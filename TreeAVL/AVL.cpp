@@ -1,13 +1,18 @@
-#include <iostream>
+/*
+#include "AVL.h"
 
 class AVL {
-	AVL(std::string data);
-	struct node;
 public:
+	AVL(std::string data) {
+		
+
+	};
+	struct node {}root;
 	void addData(std::string key) {
 	
 	};
-	bool substractData(std::string key);
+	bool substractData(std::string key) {
+	};
 	bool substractData(node* nodePointer);
 	bool search(std::string key);
 
@@ -18,3 +23,4 @@ private:
 	void rightLeftRotation(node* nodePointer);
 
 };
+*/

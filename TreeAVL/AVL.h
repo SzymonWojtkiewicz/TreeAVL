@@ -2,6 +2,7 @@
 
 #pragma once
 class AVL {
+public :
 	AVL(std::string data);
 	struct node {
 		node* parent = nullptr;
@@ -10,7 +11,6 @@ class AVL {
 		std::string key;
 		int balance = 0;
 	};
-public :
 	void addData(std::string key);
 	bool substractData(std::string key);
 	bool substractData(node* nodePointer);
