@@ -10,7 +10,7 @@ struct node {
 	node* right = nullptr;
 	int key = 0;
 	int balance = 0;
-}root;
+};
 //node5, node30, node10, node14, node17, node50, node11, node40, node20;
 
 std::string intToString(int x) {
@@ -486,18 +486,98 @@ node* search(node* root, int key){
 }
 node* substractData(node* root, int key){
 	node* nodeToDel = search(root, key);
+	if (nodeToDel == nullptr)
+		return root;
 	node* nodeBalanceStart; // from this node start rebalance
 	node* cNode = nodeToDel;
 	if (nodeToDel == root) {
 		//*********
 		if (nodeToDel->left == nullptr && nodeToDel->right == nullptr) { // No children
-
+			nodeToDel->left = nullptr;
+			nodeToDel->right = nullptr;
+			nodeToDel->parent = nullptr;
+			delete nodeToDel;
+			return nullptr;
 		}
 		else if (nodeToDel->left == nullptr || nodeToDel->right == nullptr) {//One child
-
+			if (nodeToDel->left == nullptr) {
+				cNode = nodeToDel->right->parent;
+				nodeToDel->right->parent = nullptr;
+				nodeToDel->left = nullptr;
+				nodeToDel->right = nullptr;
+				nodeToDel->parent = nullptr;
+				delete nodeToDel;
+				return cNode;
+			}
+			else
+			{
+				cNode = nodeToDel->left->parent;
+				nodeToDel->left->parent = nullptr;
+				nodeToDel->left = nullptr;
+				nodeToDel->right = nullptr;
+				nodeToDel->parent = nullptr;
+				delete nodeToDel;
+				return cNode;
+			}
 		}
 		else if (nodeToDel->left != nullptr && nodeToDel->right != nullptr) {//Has two children
-		
+			if (nodeToDel->balance > 0) {
+				cNode = nodeToDel->right;
+				while (true) {
+					if (cNode->left == nullptr) {
+						if (cNode->right != nullptr)
+							cNode->right->parent = cNode->parent;
+
+						nodeBalanceStart = cNode->parent;
+
+						cNode->parent->left = cNode->right;
+
+						cNode->right = nodeToDel->right;
+						cNode->left = nodeToDel->left;
+						cNode->parent = nodeToDel->parent;
+
+						nodeToDel->left->parent = cNode;
+
+						nodeToDel->right->parent = cNode;
+
+						
+						break;
+					}
+					else
+					{
+						cNode = cNode->left;
+					}
+				}
+			}
+			else {
+				cNode = nodeToDel->left;
+
+				while (true) {
+					if (cNode->right == nullptr) {
+						if (cNode->left != nullptr)
+							cNode->left->parent = cNode->parent;
+
+						nodeBalanceStart = cNode->parent;
+
+						cNode->parent->right = cNode->left;
+
+						cNode->right = nodeToDel->right;
+						cNode->left = nodeToDel->left;
+						cNode->parent = nodeToDel->parent;
+
+						nodeToDel->left->parent = cNode;
+
+						nodeToDel->right->parent = cNode;
+
+					
+						break;
+					}
+					else
+					{
+						cNode = cNode->right;
+					}
+				}
+			}
 		}
 
 	}
@@ -612,7 +692,7 @@ node* substractData(node* root, int key){
 				}
 				else
 				{
-					cNode = cNode->left;
+					cNode = cNode->right;
 				}
 			}
 		}
@@ -621,24 +701,24 @@ node* substractData(node* root, int key){
 
 	do {
 		cNode->balance = checkBalance(cNode);
-		if (cNode->balance < -1 || cNode->balance > 1)  //<-tu sie wyjebie 
+		if (cNode->balance < -1 || cNode->balance > 1)  
 			rebalance(cNode);
 		if (cNode->parent != nullptr)
 			cNode = cNode->parent;
 	} while (cNode->parent != nullptr);
 	// check to root balance
 	root = cNode;
-	delete& nodeToDel;
+	delete nodeToDel;
 	return root;
 }
 
 int main()
 {
-	node* rootNoode = &root;
+	node* rootNoode = new node();
 	{
 		int initialRootKey = 11;
 		//std::cin >> initialRootKey;
-		root.key = initialRootKey;
+		rootNoode->key = initialRootKey;
 	}
 	/*
 	root.key = 18;
@@ -701,7 +781,7 @@ int main()
 	rootNoode = addData(rootNoode, 13);
 	//std::cout << display((rootNoode, "output") << std::endl;
 	rootNoode = addData(rootNoode, 19);
-	/*
+	
 	rootNoode = addData(rootNoode, 19);
 	rootNoode = addData(rootNoode, 7);
 	rootNoode = addData(rootNoode, 89);
@@ -715,7 +795,14 @@ int main()
 	rootNoode = addData(rootNoode, 16);
 	rootNoode = addData(rootNoode, 22);
 	rootNoode = addData(rootNoode, 31);
-	*/
+	std::cout << display(rootNoode, "output") << std::endl;
+	rootNoode = substractData(rootNoode, 2);
+	std::cout << display(rootNoode, "output") << std::endl;
+	rootNoode = substractData(rootNoode, 2);
+	rootNoode = substractData(rootNoode, 13);
+	rootNoode = substractData(rootNoode, 11);
+	rootNoode = substractData(rootNoode, 10);
+	
 	std::cout << display(rootNoode, "output") << std::endl;
 
 	//std::cout << search(rootNoode, 29)->key << std::endl;
