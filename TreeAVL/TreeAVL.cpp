@@ -486,54 +486,71 @@ node* search(node* root, int key){
 }
 node* substractData(node* root, int key){
 	node* nodeToDel = search(root, key);
+	node* nodeBalanceStart; // from this node start rebalance
+	node* cNode = nodeToDel;
 	if (nodeToDel == root) {
 		//*********
+		if (nodeToDel->left == nullptr && nodeToDel->right == nullptr) { // No children
+
+		}
+		else if (nodeToDel->left == nullptr || nodeToDel->right == nullptr) {//One child
+
+		}
+		else if (nodeToDel->left != nullptr && nodeToDel->right != nullptr) {//Has two children
+		
+		}
 
 	}
-	else if (nodeToDel->left == nullptr && nodeToDel->right == nullptr) {
-		if (nodeToDel->parent->left == nodeToDel) {
+	else if (nodeToDel->left == nullptr && nodeToDel->right == nullptr) { // No children
+		if (nodeToDel->parent->left == nodeToDel) {//Is left child 
 			nodeToDel->parent->left = nullptr;
+			cNode = nodeToDel->parent;
 			
 		}
-		else if (nodeToDel->parent->right == nodeToDel) {
+		else if (nodeToDel->parent->right == nodeToDel) {//Is right child
 			nodeToDel->parent->right = nullptr;
-			
+			cNode = nodeToDel->parent;
 		}
 	}
-	else if (nodeToDel->left == nullptr || nodeToDel->right == nullptr) {
-		if (nodeToDel->left == nullptr) {
-			if (nodeToDel->parent->left == nodeToDel) {
+	else if (nodeToDel->left == nullptr || nodeToDel->right == nullptr) { //One child
+		if (nodeToDel->left == nullptr) {//Has right child
+			if (nodeToDel->parent->left == nodeToDel) {//Is left child
 				nodeToDel->parent->left = nodeToDel->right;
 				nodeToDel->right->parent = nodeToDel->parent;
+				cNode = nodeToDel->parent;
 				
 			}
-			else if (nodeToDel->parent->right == nodeToDel) {
+			else if (nodeToDel->parent->right == nodeToDel) {//Is right child
 				nodeToDel->parent->right = nodeToDel->right;
 				nodeToDel->right->parent = nodeToDel->parent;
+				cNode = nodeToDel->parent;
 				
 			}
 		}
-		else if (nodeToDel->right == nullptr) {
-			if (nodeToDel->parent->left == nodeToDel) {
+		else if (nodeToDel->right == nullptr) {//Has left child
+			if (nodeToDel->parent->left == nodeToDel) {//Is left child
 				nodeToDel->parent->left = nodeToDel->left;
 				nodeToDel->left->parent = nodeToDel->parent;
+				cNode = nodeToDel->parent;
 				
 			}
-			else if (nodeToDel->parent->right == nodeToDel) {
+			else if (nodeToDel->parent->right == nodeToDel) {//Is right child
 				nodeToDel->parent->right = nodeToDel->left;
 				nodeToDel->left->parent = nodeToDel->parent;
+				cNode = nodeToDel->parent;
 				
 			}
 		}
 	}
-	else if (nodeToDel->left != nullptr && nodeToDel->right != nullptr) {
-		node* cNode = nodeToDel;
+	else if (nodeToDel->left != nullptr && nodeToDel->right != nullptr) {//Has two children
 		if (nodeToDel->balance > 0) {
 			cNode = nodeToDel->right;
 			while (true) {
 				if (cNode->left == nullptr) {
 					if(cNode->right != nullptr)
 						cNode->right->parent = cNode->parent;
+
+					nodeBalanceStart = cNode->parent;
 
 					cNode->parent->left = cNode->right;
 
@@ -554,6 +571,7 @@ node* substractData(node* root, int key){
 					else {
 						std::cout << std::endl << "unexpected 1" << std::endl;
 					}
+					break;
 				}
 				else
 				{
@@ -563,10 +581,13 @@ node* substractData(node* root, int key){
 		}
 		else {
 			cNode = nodeToDel->left;
+			
 			while (true) {
 				if (cNode->right == nullptr) {
 					if (cNode->left != nullptr)
 						cNode->left->parent = cNode->parent;
+
+					nodeBalanceStart = cNode->parent;
 
 					cNode->parent->right = cNode->left;
 
@@ -587,6 +608,7 @@ node* substractData(node* root, int key){
 					else {
 						std::cout << std::endl << "unexpected 1" << std::endl;
 					}
+					break;
 				}
 				else
 				{
@@ -595,7 +617,17 @@ node* substractData(node* root, int key){
 			}
 		}
 	}
+	//!!!!!!!!!!!!! remember reseting root!!!!!!!!!
+
+	do {
+		cNode->balance = checkBalance(cNode);
+		if (cNode->balance < -1 || cNode->balance > 1)  //<-tu sie wyjebie 
+			rebalance(cNode);
+		if (cNode->parent != nullptr)
+			cNode = cNode->parent;
+	} while (cNode->parent != nullptr);
 	// check to root balance
+	root = cNode;
 	delete& nodeToDel;
 	return root;
 }
