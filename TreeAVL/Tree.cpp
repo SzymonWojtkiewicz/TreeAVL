@@ -1,9 +1,4 @@
-#include <iostream>
-#include <stack>
-#include <vector>
-#include<string>  
-#include <fstream>
-
+#include "Tree.h"
 struct node {
 	node* parent = nullptr;
 	node* left = nullptr;
@@ -18,11 +13,11 @@ std::string intToString(int x) {
 	if (x > -1 && x < 10) {
 		str = "00" + str;
 	}
-	else if(x > 9 && x < 100)
+	else if (x > 9 && x < 100)
 	{
 		str = "0" + str;
 	}
-	else if(x > -10 && x < 0)
+	else if (x > -10 && x < 0)
 	{
 		str = std::to_string(abs(x));
 		str = "-0" + str;
@@ -46,7 +41,7 @@ int display(node* root, std::string failNameWithoutTxt) {
 				st.push(0);
 				currentNode = currentNode->left;
 			}
-			else if(currentNode->right != nullptr) {
+			else if (currentNode->right != nullptr) {
 				currentHight++;
 				if (currentHight > treeHight)
 					treeHight = currentHight;
@@ -62,7 +57,7 @@ int display(node* root, std::string failNameWithoutTxt) {
 					}
 					currentHight--;
 					currentNode = currentNode->parent;
-					if (st.empty()) 
+					if (st.empty())
 					{
 						std::cout << std::endl << "Unexpected end of a stack display 1 " << currentNode->balance << std::endl; breakAll = true; break;
 					}
@@ -139,7 +134,7 @@ int display(node* root, std::string failNameWithoutTxt) {
 					}
 					currentHight--;
 					currentNode = currentNode->parent;
-					if (st.empty()) 
+					if (st.empty())
 					{
 						std::cout << std::endl << "Unexpected end of a stack display 2 " << currentNode->balance << std::endl; breakAll = true; break;
 					}
@@ -150,7 +145,7 @@ int display(node* root, std::string failNameWithoutTxt) {
 						currentNode = currentNode->right;
 						break;
 					}
-					else if(st.top() == 0 && currentNode->right == nullptr)
+					else if (st.top() == 0 && currentNode->right == nullptr)
 					{
 						for (int i = 1; i + currentHight < treeHight + 1; i++) {
 							int j = pow(2, i - 1);
@@ -168,7 +163,7 @@ int display(node* root, std::string failNameWithoutTxt) {
 	}
 	//*************************************
 	std::vector<std::string> image;
-	
+
 	size_t size = 2 * treeHight + 1;
 	image.resize(size);
 	{
@@ -177,7 +172,7 @@ int display(node* root, std::string failNameWithoutTxt) {
 			std::string space = " ";
 			std::string space2 = "";
 			for (int z = 0; z < j; z++) {
-				 space2 = space2 +space;
+				space2 = space2 + space;
 			}
 			j = j * 2 + 2;
 
@@ -197,29 +192,29 @@ int display(node* root, std::string failNameWithoutTxt) {
 					image[2 * i] = image[2 * i] + nextNumb + space2;
 				}
 			}
-			
-				
-			
+
+
+
 		}
 	}
 	std::string finaleImage;
 	for (int i = 0; i < image.size(); i++) {
 		finaleImage = finaleImage + "\n" + image[i];
-		
+
 	}
 	std::ofstream out(failNameWithoutTxt + ".txt");
 	out << finaleImage;
 	out.close();
 	int bss = 20;
-		return treeHight;
+	return treeHight;
 }
 int checkBalance(node* root) {
 	int ltree = 0;
 	int rtree = 0;
 	int treeHight = 0;
 	node* currentNode = root->left;
-	
-	if(currentNode != nullptr){
+
+	if (currentNode != nullptr) {
 		int currentHight = 0;
 		std::stack<bool> st;
 		bool breakAll = false;
@@ -315,7 +310,7 @@ void leftRotation(node* nodePointer) {
 	node* nodeParent = nodePointer->parent;
 	node* nodeRightLeft = nodePointer->right->left;
 
-	
+
 	if (nodeParent != nullptr)
 		if (nodeParent->left == cNodePointer)
 			cNodePointer->parent->left = nodeRight;
@@ -336,23 +331,23 @@ void rightRotation(node* nodePointer) {
 	node* nodeLeft = nodePointer->left;
 	node* nodeParent = nodePointer->parent;
 	node* nodeLeftRight = nodePointer->left->right;
-	
-	
+
+
 	if (nodeParent != nullptr)
 		if (nodeParent->left == cNodePointer)
 			cNodePointer->parent->left = nodeLeft;
-		else if(nodeParent->right == cNodePointer)
+		else if (nodeParent->right == cNodePointer)
 			cNodePointer->parent->right = nodeLeft;
 	cNodePointer->left = nodeLeftRight;
 	cNodePointer->parent = nodeLeft;
 	nodeLeft->parent = nodeParent;
 	nodeLeft->right = cNodePointer;
-	if(nodeLeftRight != nullptr)
+	if (nodeLeftRight != nullptr)
 		nodeLeftRight->parent = cNodePointer;
 
 	cNodePointer->balance = checkBalance(cNodePointer);
 	nodeLeft->balance = checkBalance(nodeLeft);
-}			
+}
 void leftRightRotation(node* nodePointer) {
 	leftRotation(nodePointer->left);
 	rightRotation(nodePointer);
@@ -379,8 +374,8 @@ void rebalance(node* curentNode) {
 		}
 	}
 }
-node* addData(node* root , int key) {
-	
+node* addData(node* root, int key) {
+
 	node* curentNode = root;
 	node* newNode = new node();
 	newNode->key = key;
@@ -416,7 +411,7 @@ node* addData(node* root , int key) {
 				}
 			}
 			else {
-				std::cout << std::endl << "Unexpected Exeption"<< std::endl;
+				std::cout << std::endl << "Unexpected Exeption" << std::endl;
 				return root;
 			}
 		}
@@ -434,7 +429,7 @@ node* addData(node* root , int key) {
 			if (curentNode->balance == 0) {
 				break;
 			}
-			else if(curentNode->balance == -1 || curentNode->balance == 1) {
+			else if (curentNode->balance == -1 || curentNode->balance == 1) {
 				if (curentNode->parent == nullptr)
 					break;
 				else
@@ -445,7 +440,7 @@ node* addData(node* root , int key) {
 				//bool replantRoot = false;
 				//if (curentNode = root)
 				//	replantRoot = true;
-				
+
 				rebalance(curentNode);
 				//if (replantRoot)
 				//	root = curentNode->parent;
@@ -456,8 +451,8 @@ node* addData(node* root , int key) {
 		}
 	}
 	return root;
-	}
-node* search(node* root, int key){
+}
+node* search(node* root, int key) {
 	node* currentNode = root;
 	while (true) {
 		if (currentNode->key == key) {
@@ -484,7 +479,7 @@ node* search(node* root, int key){
 		}
 	}
 }
-node* substractData(node* root, int key){
+node* substractData(node* root, int key) {
 	node* nodeToDel = search(root, key);
 	if (nodeToDel == nullptr)
 		return root;
@@ -540,7 +535,7 @@ node* substractData(node* root, int key){
 
 						nodeToDel->right->parent = cNode;
 
-						
+
 						break;
 					}
 					else
@@ -569,7 +564,7 @@ node* substractData(node* root, int key){
 
 						nodeToDel->right->parent = cNode;
 
-					
+
 						break;
 					}
 					else
@@ -585,7 +580,7 @@ node* substractData(node* root, int key){
 		if (nodeToDel->parent->left == nodeToDel) {//Is left child 
 			nodeToDel->parent->left = nullptr;
 			cNode = nodeToDel->parent;
-			
+
 		}
 		else if (nodeToDel->parent->right == nodeToDel) {//Is right child
 			nodeToDel->parent->right = nullptr;
@@ -598,13 +593,13 @@ node* substractData(node* root, int key){
 				nodeToDel->parent->left = nodeToDel->right;
 				nodeToDel->right->parent = nodeToDel->parent;
 				cNode = nodeToDel->parent;
-				
+
 			}
 			else if (nodeToDel->parent->right == nodeToDel) {//Is right child
 				nodeToDel->parent->right = nodeToDel->right;
 				nodeToDel->right->parent = nodeToDel->parent;
 				cNode = nodeToDel->parent;
-				
+
 			}
 		}
 		else if (nodeToDel->right == nullptr) {//Has left child
@@ -612,13 +607,13 @@ node* substractData(node* root, int key){
 				nodeToDel->parent->left = nodeToDel->left;
 				nodeToDel->left->parent = nodeToDel->parent;
 				cNode = nodeToDel->parent;
-				
+
 			}
 			else if (nodeToDel->parent->right == nodeToDel) {//Is right child
 				nodeToDel->parent->right = nodeToDel->left;
 				nodeToDel->left->parent = nodeToDel->parent;
 				cNode = nodeToDel->parent;
-				
+
 			}
 		}
 	}
@@ -627,7 +622,7 @@ node* substractData(node* root, int key){
 			cNode = nodeToDel->right;
 			while (true) {
 				if (cNode->left == nullptr) {
-					if(cNode->right != nullptr)
+					if (cNode->right != nullptr)
 						cNode->right->parent = cNode->parent;
 
 					nodeBalanceStart = cNode->parent;
@@ -641,7 +636,7 @@ node* substractData(node* root, int key){
 					nodeToDel->left->parent = cNode;
 
 					nodeToDel->right->parent = cNode;
-					
+
 					if (nodeToDel->parent->left == nodeToDel) {
 						nodeToDel->parent->left = cNode;
 					}
@@ -661,7 +656,7 @@ node* substractData(node* root, int key){
 		}
 		else {
 			cNode = nodeToDel->left;
-			
+
 			while (true) {
 				if (cNode->right == nullptr) {
 					if (cNode->left != nullptr)
@@ -701,7 +696,7 @@ node* substractData(node* root, int key){
 
 	do {
 		cNode->balance = checkBalance(cNode);
-		if (cNode->balance < -1 || cNode->balance > 1)  
+		if (cNode->balance < -1 || cNode->balance > 1)
 			rebalance(cNode);
 		if (cNode->parent != nullptr)
 			cNode = cNode->parent;
@@ -710,100 +705,4 @@ node* substractData(node* root, int key){
 	root = cNode;
 	delete nodeToDel;
 	return root;
-}
-
-int main()
-{
-	node* rootNoode = new node();
-	{
-		int initialRootKey = 11;
-		//std::cin >> initialRootKey;
-		rootNoode->key = initialRootKey;
-	}
-	/*
-	root.key = 18;
-	root.left = &node5;
-	root.right = &node30;
-
-	node5.key = 5;
-	node5.left = &node10;
-	node5.right = nullptr;
-	node5.parent = &root;
-	
-	node10.key = 10;
-	node10.left = nullptr;
-	node10.right = &node14;
-	node10.parent = &node5;
-
-	node14.key = 14;
-	node14.parent = &node10;
-
-	node30.key = 30;
-	node30.left = &node17;
-	node30.right = &node50;
-	node30.parent = &root;
-
-	node17.key = 17;
-	node17.left = &node11;
-	node17.right = &node40;
-	node17.parent = &node30;
-
-	node11.key = 11;
-	node11.left = nullptr;
-	node11.right = &node20;
-	node11.parent = &node17;
-
-	node20.key = 20;
-	node20.parent = &node11;
-
-	node40.key = 40;
-	node40.parent = &node17;
-
-	node50.key = 50;
-	node50.parent = &node30;
-	*/
-	
-	//std::cout << display((rootNoode, "output") << std::endl;
-	rootNoode = addData(rootNoode, 10);
-	//std::cout << display((rootNoode, "output") << std::endl;
-	rootNoode = addData(rootNoode, 9);
-	//std::cout << display((rootNoode, "output") << std::endl;
-	rootNoode = addData(rootNoode, 50);
-	//std::cout << display((rootNoode, "output") << std::endl;
-	rootNoode = addData(rootNoode, 0);
-	std::cout << display(rootNoode, "output") << std::endl;
-	rootNoode = addData(rootNoode, 3);
-	//std::cout << display((rootNoode, "output") << std::endl;
-	rootNoode = addData(rootNoode, -29);
-	std::cout << display(rootNoode, "output") << std::endl;
-	rootNoode = addData(rootNoode, 60);
-	//std::cout << display((rootNoode, "output") << std::endl;
-	rootNoode = addData(rootNoode, 13);
-	//std::cout << display((rootNoode, "output") << std::endl;
-	rootNoode = addData(rootNoode, 19);
-	
-	rootNoode = addData(rootNoode, 19);
-	rootNoode = addData(rootNoode, 7);
-	rootNoode = addData(rootNoode, 89);
-	rootNoode = addData(rootNoode, 49);
-	rootNoode = addData(rootNoode, 39);
-	rootNoode = addData(rootNoode, 29);
-	rootNoode = addData(rootNoode, -19);
-	rootNoode = addData(rootNoode, 2);
-	rootNoode = addData(rootNoode, 6);
-	rootNoode = addData(rootNoode, 12);
-	rootNoode = addData(rootNoode, 16);
-	rootNoode = addData(rootNoode, 22);
-	rootNoode = addData(rootNoode, 31);
-	std::cout << display(rootNoode, "output") << std::endl;
-	rootNoode = substractData(rootNoode, 2);
-	std::cout << display(rootNoode, "output") << std::endl;
-	rootNoode = substractData(rootNoode, 2);
-	rootNoode = substractData(rootNoode, 13);
-	rootNoode = substractData(rootNoode, 11);
-	rootNoode = substractData(rootNoode, 10);
-	
-	std::cout << display(rootNoode, "output") << std::endl;
-
-	//std::cout << search(rootNoode, 29)->key << std::endl;
 }
